@@ -21,7 +21,8 @@
     .gjensidige-box { background: #e8f0fe; }
     .diff-box { background: #ffe0b2; }
     .note-box { background: #e0ffe0; }
-    .note-box.negative { background: #ffd6d6; }
+    .note-box.negative { background: #a5f7b2 !important; color: #155724; }
+    .note-box.positive { background: #ffb2b2 !important; color: #721c24; }
   </style>
 </head>
 <body>
@@ -88,27 +89,29 @@
     document.getElementById('klpPrice').value = "";
     document.getElementById('diffBox').innerText = "";
     document.getElementById('noteBox').innerText = "";
-    document.getElementById('noteBox').classList.remove('negative');
+    document.getElementById('noteBox').classList.remove('negative','positive');
     document.getElementById('compareSection').classList.remove('hidden');
   }
 
   function updateComparison() {
     const klp = parseInt(document.getElementById('klpPrice').value, 10);
     const gjensidige = parseInt(document.getElementById('gjensidigePrice').value, 10);
+    const noteBox = document.getElementById('noteBox');
     if (isNaN(klp) || isNaN(gjensidige)) {
       document.getElementById('diffBox').innerText = "";
-      document.getElementById('noteBox').innerText = "";
-      document.getElementById('noteBox').classList.remove('negative');
+      noteBox.innerText = "";
+      noteBox.classList.remove('negative','positive');
       return;
     }
     const diff = klp - gjensidige;
     document.getElementById('diffBox').innerText = `Differanse: kr ${diff}`;
-    const noteBox = document.getElementById('noteBox');
     if (diff < 0) {
       noteBox.innerText = "close kunden";
       noteBox.classList.add('negative');
+      noteBox.classList.remove('positive');
     } else {
       noteBox.innerText = "Prøv Bonus 80% på bil";
+      noteBox.classList.add('positive');
       noteBox.classList.remove('negative');
     }
   }
