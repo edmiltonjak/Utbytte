@@ -61,30 +61,40 @@
 <script>
   let lastNetDividend = 0;
   let lastAmount = 0;
+  let lastGrossDividend = 0;
 
   function calculateDividend() {
     let amount = parseFloat(document.getElementById('amount').value);
     let grossRate = parseFloat(document.getElementById('grossRate').value) / 100;
     let taxRate = parseFloat(document.getElementById('taxRate').value) / 100;
-    
+
     if (isNaN(amount) || isNaN(grossRate) || isNaN(taxRate)) {
       document.getElementById('result').innerText = "Vennligst fyll inn alle feltene korrekt.";
       document.getElementById('compareBtn').classList.add('hidden');
       document.getElementById('compareSection').classList.add('hidden');
       return;
     }
-    
-    let netDividend = amount * grossRate * (1 - taxRate);
-    document.getElementById('result').innerText = `Netto utbytte: kr ${netDividend.toFixed(2)}`;
-    
+
+    let grossDividend = amount * grossRate; // Brutto utbytte
+    let taxOnDividend = grossDividend * taxRate; // Skatt på utbytte
+    let netDividend = grossDividend - taxOnDividend; // Netto utbytte
+
+    document.getElementById('result').innerHTML = `
+      Utbytte uten skatt: <b>kr ${grossDividend.toFixed(2)}</b><br>
+      Utbytte med skatt: <b>kr ${netDividend.toFixed(2)}</b><br>
+      Reell skattekostnad: <b>kr ${taxOnDividend.toFixed(2)}</b>
+    `;
+
     lastNetDividend = netDividend;
+    lastGrossDividend = grossDividend;
     lastAmount = amount;
     document.getElementById('compareBtn').classList.remove('hidden');
     document.getElementById('compareSection').classList.add('hidden');
   }
 
   function showCompare() {
-    const gjensidigePrice = Math.round(lastAmount - lastNetDividend);
+    // Nå bruker vi pris uten skatt (brutto utbytte)
+    const gjensidigePrice = Math.round(lastAmount - lastGrossDividend);
     document.getElementById('gjensidigePrice').value = gjensidigePrice;
     document.getElementById('klpPrice').value = "";
     document.getElementById('diffBox').innerText = "";
