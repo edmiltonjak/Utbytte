@@ -12,6 +12,16 @@
     button:hover { background: #0056b3; }
     .result { font-weight: bold; margin-top: 15px; }
     .note { font-size: 0.9em; color: #555; margin-bottom: 15px; }
+    .hidden { display: none; }
+    .compare-section { background: #f0f0f0; padding: 15px; border-radius: 8px; margin-top: 20px; }
+    label { font-weight: 500; }
+    .diff-box, .gjensidige-box, .note-box {
+      width: 100%; margin: 10px 0; padding: 10px; border-radius: 4px; font-size: 1.1em;
+    }
+    .gjensidige-box { background: #e8f0fe; }
+    .diff-box { background: #ffe0b2; }
+    .note-box { background: #e0ffe0; }
+    .note-box.negative { background: #ffd6d6; }
   </style>
 </head>
 <body>
@@ -32,9 +42,25 @@
   <button onclick="calculateDividend()">Beregn Netto Utbytte</button>
   
   <div class="result" id="result"></div>
+
+  <button id="compareBtn" class="hidden" onclick="showCompare()">Sammenlign</button>
+  
+  <div class="compare-section hidden" id="compareSection">
+    <label for="klpPrice">KLP Pris (kr):</label>
+    <input type="number" id="klpPrice" placeholder="F.eks. 25000" oninput="updateComparison()">
+    
+    <label for="gjensidigePrice">Gjensidige pris (kr):</label>
+    <input type="text" id="gjensidigePrice" class="gjensidige-box" readonly>
+    
+    <div class="diff-box" id="diffBox"></div>
+    <div class="note-box" id="noteBox"></div>
+  </div>
 </div>
 
 <script>
+  let lastNetDividend = 0;
+  let lastAmount = 0;
+
   function calculateDividend() {
     let amount = parseFloat(document.getElementById('amount').value);
     let grossRate = parseFloat(document.getElementById('grossRate').value) / 100;
@@ -42,14 +68,51 @@
     
     if (isNaN(amount) || isNaN(grossRate) || isNaN(taxRate)) {
       document.getElementById('result').innerText = "Vennligst fyll inn alle feltene korrekt.";
+      document.getElementById('compareBtn').classList.add('hidden');
+      document.getElementById('compareSection').classList.add('hidden');
       return;
     }
     
     let netDividend = amount * grossRate * (1 - taxRate);
     document.getElementById('result').innerText = `Netto utbytte: kr ${netDividend.toFixed(2)}`;
+    
+    lastNetDividend = netDividend;
+    lastAmount = amount;
+    document.getElementById('compareBtn').classList.remove('hidden');
+    document.getElementById('compareSection').classList.add('hidden');
+  }
+
+  function showCompare() {
+    const gjensidigePrice = Math.round(lastAmount - lastNetDividend);
+    document.getElementById('gjensidigePrice').value = gjensidigePrice;
+    document.getElementById('klpPrice').value = "";
+    document.getElementById('diffBox').innerText = "";
+    document.getElementById('noteBox').innerText = "";
+    document.getElementById('noteBox').classList.remove('negative');
+    document.getElementById('compareSection').classList.remove('hidden');
+  }
+
+  function updateComparison() {
+    const klp = parseInt(document.getElementById('klpPrice').value, 10);
+    const gjensidige = parseInt(document.getElementById('gjensidigePrice').value, 10);
+    if (isNaN(klp) || isNaN(gjensidige)) {
+      document.getElementById('diffBox').innerText = "";
+      document.getElementById('noteBox').innerText = "";
+      document.getElementById('noteBox').classList.remove('negative');
+      return;
+    }
+    const diff = klp - gjensidige;
+    document.getElementById('diffBox').innerText = `Differanse: kr ${diff}`;
+    const noteBox = document.getElementById('noteBox');
+    if (diff < 0) {
+      noteBox.innerText = "close kunden";
+      noteBox.classList.add('negative');
+    } else {
+      noteBox.innerText = "Prøv Bonus 80% på bil";
+      noteBox.classList.remove('negative');
+    }
   }
 </script>
 
 </body>
 </html>
-
