@@ -194,11 +194,11 @@
     const diff = klp - gjensidige;
     document.getElementById('diffBox').innerText = `Differanse: kr ${diff}`;
     if (diff < 0) {
-      noteBox.innerText = "Avslutt salg";
+      noteBox.innerText = "Avslutt salg, Bruk Bytt.no";
       noteBox.classList.add('negative');
       noteBox.classList.remove('positive');
     } else {
-      noteBox.innerText = "Foreslå justering (bonus/egenandel)";
+      noteBox.innerText = "Foreslå justering (bonus/egenandel) Bruk Bytt.no";
       noteBox.classList.add('positive');
       noteBox.classList.remove('negative');
     }
@@ -207,3 +207,4 @@
 
 </body>
 </html>
+
