@@ -31,6 +31,17 @@
       box-shadow: 0 4px 10px rgba(0,0,0,0.08);
       min-height: 120px;
       margin-bottom: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 22px;
+    }
+    .note-section {}
+    .explanation-section {
+      margin-top: 18px;
+    }
+    .placeholder {
+      color: #aaa;
+      font-style: italic;
     }
     input { width: 100%; padding: 10px; margin: 5px 0 15px 0; border-radius: 5px; border: 1px solid #ccc; }
     button { padding: 10px 20px; border: none; border-radius: 5px; background: #007BFF; color: #fff; cursor: pointer; }
@@ -57,7 +68,7 @@
 <body>
 
 <div class="main-content">
-  <!-- Calculator on the left -->
+  <!-- Kalkulator til venstre -->
   <div class="calculator">
     <h2>Utbytte Kalkulator</h2>
     <div class="note">Gjensidige i 2024 har utbetalt 11,1%, skattepliktig kapitalinntekt skattesats 22%</div>
@@ -78,7 +89,7 @@
     <button id="compareBtn" class="hidden" onclick="showCompare()">Sammenlign</button>
     
     <div class="compare-section hidden" id="compareSection">
-      <label for="klpPrice">KLP Pris (kr):</label>
+      <label for="klpPrice">Tilbud Pris (kr):</label>
       <input type="number" id="klpPrice" placeholder="F.eks. 25000" oninput="updateComparison()">
       
       <label for="gjensidigePrice">Gjensidige pris (kr):</label>
@@ -89,10 +100,17 @@
     </div>
   </div>
 
-  <!-- Note box on the right -->
+  <!-- Notat til høyre -->
   <div class="right-note-box" id="rightNoteBox">
-    Gjensidige betaler <b>X1</b> utbytte til kundene, men dette registreres hos Skatteetaten som skattepliktig kapitalinntekt. 
-    Det betyr at kunden får en økt reell skattekostnad på <b>X2</b>, og etter skatt utgjør utbyttet egentlig <b>X3</b>.
+    <div class="note-section placeholder">
+      Gjensidige betaler <b>X1</b> utbytte til kundene, men dette registreres hos Skatteetaten som skattepliktig kapitalinntekt.<br>
+      Det betyr at kunden får en økt reell skattekostnad på <b>X2</b>, og etter skatt utgjør utbyttet egentlig <b>X3</b>.
+    </div>
+    <hr>
+    <div class="explanation-section">
+      <b>Forklaring:</b><br>
+      Utbytte fra Gjensidige regnes som skattepliktig kapitalinntekt. Det betyr at når du får utbytte, så må du betale 22 % skatt av beløpet. Får du for eksempel 10 000 kr i utbytte, sitter du igjen med ca. 7 800 kr etter skatt. Du får altså mer å betale i skatt det året, men du sitter fortsatt igjen med en gevinst.
+    </div>
   </div>
 </div>
 
@@ -111,8 +129,15 @@
       document.getElementById('compareBtn').classList.add('hidden');
       document.getElementById('compareSection').classList.add('hidden');
       document.getElementById('rightNoteBox').innerHTML = `
-        Gjensidige betaler <b>X1</b> utbytte til kundene, men dette registreres hos Skatteetaten som skattepliktig kapitalinntekt. 
-        Det betyr at kunden får en økt reell skattekostnad på <b>X2</b>, og etter skatt utgjør utbyttet egentlig <b>X3</b>.
+        <div class="note-section placeholder">
+          Gjensidige betaler <b>X1</b> utbytte til kundene, men dette registreres hos Skatteetaten som skattepliktig kapitalinntekt.<br>
+          Det betyr at kunden får en økt reell skattekostnad på <b>X2</b>, og etter skatt utgjør utbyttet egentlig <b>X3</b>.
+        </div>
+        <hr>
+        <div class="explanation-section">
+          <b>Forklaring:</b><br>
+          Utbytte fra Gjensidige regnes som skattepliktig kapitalinntekt. Det betyr at når du får utbytte, så må du betale 22 % skatt av beløpet. Får du for eksempel 10 000 kr i utbytte, sitter du igjen med ca. 7 800 kr etter skatt. Du får altså mer å betale i skatt det året, men du sitter fortsatt igjen med en gevinst.
+        </div>
       `;
       return;
     }
@@ -121,15 +146,22 @@
     let taxOnDividend = grossDividend * taxRate; // Skatt på utbytte
     let netDividend = grossDividend - taxOnDividend; // Netto utbytte
 
-    // Only show "Utbytte" and "Reell skattekostnad" in calculator results
+    // Kun "Utbytte" og "Reell skattekostnad" i kalkulatoren
     document.getElementById('result').innerHTML = `
       Utbytte: <b>kr ${grossDividend.toFixed(2)}</b><br>
       Reell skattekostnad: <b>kr ${taxOnDividend.toFixed(2)}</b>
     `;
-    // Update right note box (with all numbers including net dividend)
+    // Oppdater note-boks til høyre med tall
     document.getElementById('rightNoteBox').innerHTML = `
-      Gjensidige betaler <b>kr ${grossDividend.toFixed(2)}</b> utbytte til kundene, men dette registreres hos Skatteetaten som skattepliktig kapitalinntekt. 
-      Det betyr at kunden får en økt reell skattekostnad på <b>kr ${taxOnDividend.toFixed(2)}</b>, og etter skatt utgjør utbyttet egentlig <b>kr ${netDividend.toFixed(2)}</b>.
+      <div class="note-section">
+        Gjensidige betaler <b>kr ${grossDividend.toFixed(2)}</b> utbytte til kundene, men dette registreres hos Skatteetaten som skattepliktig kapitalinntekt.<br>
+        Det betyr at kunden får en økt reell skattekostnad på <b>kr ${taxOnDividend.toFixed(2)}</b>, og etter skatt utgjør utbyttet egentlig <b>kr ${netDividend.toFixed(2)}</b>.
+      </div>
+      <hr>
+      <div class="explanation-section">
+        <b>Forklaring:</b><br>
+        Utbytte fra Gjensidige regnes som skattepliktig kapitalinntekt. Det betyr at når du får utbytte, så må du betale 22 % skatt av beløpet. Får du for eksempel 10 000 kr i utbytte, sitter du igjen med ca. 7 800 kr etter skatt. Du får altså mer å betale i skatt det året, men du sitter fortsatt igjen med en gevinst.
+      </div>
     `;
 
     lastNetDividend = netDividend;
@@ -162,11 +194,11 @@
     const diff = klp - gjensidige;
     document.getElementById('diffBox').innerText = `Differanse: kr ${diff}`;
     if (diff < 0) {
-      noteBox.innerText = "close kunden";
+      noteBox.innerText = "Avslutt salg";
       noteBox.classList.add('negative');
       noteBox.classList.remove('positive');
     } else {
-      noteBox.innerText = "Prøv Bonus 80% på bil";
+      noteBox.innerText = "Foreslå justering (bonus/egenandel)";
       noteBox.classList.add('positive');
       noteBox.classList.remove('negative');
     }
