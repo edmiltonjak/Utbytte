@@ -13,16 +13,6 @@
       margin: auto;
       align-items: flex-start;
     }
-    .left-note-box {
-      flex: 0 0 340px;
-      background: #eafcff;
-      padding: 18px;
-      border-radius: 10px;
-      font-size: 1.05em;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.08);
-      min-height: 120px;
-      margin-bottom: 20px;
-    }
     .calculator {
       background: #fff;
       padding: 20px;
@@ -31,6 +21,16 @@
       flex: 1 1 400px;
       box-shadow: 0 4px 10px rgba(0,0,0,0.1);
       margin: 0;
+    }
+    .right-note-box {
+      flex: 0 0 340px;
+      background: #eafcff;
+      padding: 18px;
+      border-radius: 10px;
+      font-size: 1.05em;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+      min-height: 120px;
+      margin-bottom: 20px;
     }
     input { width: 100%; padding: 10px; margin: 5px 0 15px 0; border-radius: 5px; border: 1px solid #ccc; }
     button { padding: 10px 20px; border: none; border-radius: 5px; background: #007BFF; color: #fff; cursor: pointer; }
@@ -50,18 +50,14 @@
     .note-box.positive { background: #ffb2b2 !important; color: #721c24; }
     @media (max-width: 900px) {
       .main-content { flex-direction: column; }
-      .left-note-box, .calculator { max-width: 100%; width: 100%; }
+      .right-note-box, .calculator { max-width: 100%; width: 100%; }
     }
   </style>
 </head>
 <body>
 
 <div class="main-content">
-  <div class="left-note-box" id="leftNoteBox">
-    Gjensidige betaler <b>X1</b> utbytte til kundene, men dette registreres hos Skatteetaten som skattepliktig kapitalinntekt. 
-    Det betyr at kunden får en økt reell skattekostnad på <b>X2</b>, og etter skatt utgjør utbyttet egentlig <b>X3</b>.
-  </div>
-
+  <!-- Calculator on the left -->
   <div class="calculator">
     <h2>Utbytte Kalkulator</h2>
     <div class="note">Gjensidige i 2024 har utbetalt 11,1%, skattepliktig kapitalinntekt skattesats 22%</div>
@@ -92,6 +88,12 @@
       <div class="note-box" id="noteBox"></div>
     </div>
   </div>
+
+  <!-- Note box on the right -->
+  <div class="right-note-box" id="rightNoteBox">
+    Gjensidige betaler <b>X1</b> utbytte til kundene, men dette registreres hos Skatteetaten som skattepliktig kapitalinntekt. 
+    Det betyr at kunden får en økt reell skattekostnad på <b>X2</b>, og etter skatt utgjør utbyttet egentlig <b>X3</b>.
+  </div>
 </div>
 
 <script>
@@ -108,7 +110,7 @@
       document.getElementById('result').innerText = "Vennligst fyll inn alle feltene korrekt.";
       document.getElementById('compareBtn').classList.add('hidden');
       document.getElementById('compareSection').classList.add('hidden');
-      document.getElementById('leftNoteBox').innerHTML = `
+      document.getElementById('rightNoteBox').innerHTML = `
         Gjensidige betaler <b>X1</b> utbytte til kundene, men dette registreres hos Skatteetaten som skattepliktig kapitalinntekt. 
         Det betyr at kunden får en økt reell skattekostnad på <b>X2</b>, og etter skatt utgjør utbyttet egentlig <b>X3</b>.
       `;
@@ -124,8 +126,8 @@
       Utbytte: <b>kr ${grossDividend.toFixed(2)}</b><br>
       Reell skattekostnad: <b>kr ${taxOnDividend.toFixed(2)}</b>
     `;
-    // Update left note box (with all numbers including net dividend)
-    document.getElementById('leftNoteBox').innerHTML = `
+    // Update right note box (with all numbers including net dividend)
+    document.getElementById('rightNoteBox').innerHTML = `
       Gjensidige betaler <b>kr ${grossDividend.toFixed(2)}</b> utbytte til kundene, men dette registreres hos Skatteetaten som skattepliktig kapitalinntekt. 
       Det betyr at kunden får en økt reell skattekostnad på <b>kr ${taxOnDividend.toFixed(2)}</b>, og etter skatt utgjør utbyttet egentlig <b>kr ${netDividend.toFixed(2)}</b>.
     `;
