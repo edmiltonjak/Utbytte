@@ -22,6 +22,18 @@
       box-shadow: 0 4px 10px rgba(0,0,0,0.1);
       margin: 0;
     }
+    .title-row {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 8px;
+    }
+    .title-row img {
+      width: 70px;
+      height: auto;
+      border-radius: 7px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.10);
+    }
     .right-note-box {
       flex: 0 0 340px;
       background: #eafcff;
@@ -62,6 +74,7 @@
     @media (max-width: 900px) {
       .main-content { flex-direction: column; }
       .right-note-box, .calculator { max-width: 100%; width: 100%; }
+      .title-row { justify-content: center; }
     }
   </style>
 </head>
@@ -70,7 +83,10 @@
 <div class="main-content">
   <!-- Kalkulator til venstre -->
   <div class="calculator">
-    <h2>Utbytte Kalkulator</h2>
+    <div class="title-row">
+      <img src="emblem.png" alt="Kundefavoritt emblem" />
+      <h2 style="margin:0;">Utbytte Kalkulator</h2>
+    </div>
     <div class="note">Gjensidige i 2024 har utbetalt 11,1%, skattepliktig kapitalinntekt skattesats 22%</div>
     
     <label>Beløp (kr):</label>
@@ -207,4 +223,3 @@
 
 </body>
 </html>
-
